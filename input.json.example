@@ -1,0 +1,17 @@
+{
+  "voice": {
+    "outputPath": "voices/foo",
+    "voiceId": "c6SfcYrb2t09NHXiT80T",
+    "outputFormat": "mp3_44100_128",
+    "seed": "123456",
+    "lines": [
+      {
+        "text": "Hello, world!"
+      },
+      {
+        "previous_text": "foo",
+        "text": "bar"
+      }
+    ]
+  }
+}
