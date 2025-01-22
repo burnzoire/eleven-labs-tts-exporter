@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  tts-generator:
+    build: .
+    environment:
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+    volumes:
+      - ./output:/app/output
+    command: python generate.py input.json.example

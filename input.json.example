@@ -1,9 +1,17 @@
 {
   "voice": {
     "outputPath": "voices/foo",
-    "voiceId": "c6SfcYrb2t09NHXiT80T",
-    "outputFormat": "mp3_44100_128",
-    "seed": "123456",
+    "generateSettings": {
+      "voiceId": "c6SfcYrb2t09NHXiT80T",
+      "format": "mp3_44100_128",
+      "seed": "123456"
+    },
+    "convertSettings": {
+      "format": "ogg",
+      "frameRate": "22000",
+      "channels": "1",
+      "normalize": "true"
+    },
     "lines": [
       {
         "text": "Hello, world!"

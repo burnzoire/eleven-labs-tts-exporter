@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 elevenlabs = "*"
 pydub = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
