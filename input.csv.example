@@ -1,0 +1,2 @@
+path, filename, voice_id, input, generate_format, generate_model, convert_format, convert_framerate, convert_channels, normalize, seed, previous_text, next_text
+voices/foo, hello_world, c6SfcYrb2t09NHXiT80T, "Hello, world", mp3_44100_128, eleven_multilingual_v2, ogg, 22000, 1, true, 123456,,
