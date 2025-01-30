@@ -14,6 +14,12 @@ input_file = sys.argv[1]
 regen_arg = sys.argv[2] if len(sys.argv) == 3 else "false"
 regen = "true" in regen_arg.strip().lower()
 
+# Sanitize and resolve the input_file path
+input_file = os.path.abspath(input_file)
+
+print(f"Input file: {input_file}")
+print(f"Regen: {regen}")
+
 load_dotenv()  # Load environment variables from .env file
 
 api_key = os.getenv("ELEVENLABS_API_KEY")
