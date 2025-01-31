@@ -11,7 +11,7 @@ if len(sys.argv) < 2 or len(sys.argv) > 3:
     sys.exit(1)
 
 input_file = sys.argv[1]
-regen_arg = sys.argv[2] if len(sys.argv) == 3 else "false"
+regen_arg = sys.argv[2] if len(sys.argv() == 3 else "false"
 regen = "true" in regen_arg.strip().lower()
 
 # Sanitize and resolve the input_file path
@@ -48,10 +48,11 @@ with open(input_file, mode='r') as file:
         next_text = row.get('next_text')
 
         output_path = os.path.join("output", path)
-        output_file = os.path.join(output_path, filename + ".mp3")
+        tmp_path = os.path.join("tmp", path)
+        tmp_file = os.path.join(tmp_path, filename + ".mp3")
 
-        if os.path.exists(output_file) and not regen:
-            print(f"Skipping {output_file} as it already exists and regen is not set.")
+        if os.path.exists(tmp_file) and not regen:
+            print(f"Skipping {tmp_file} as it already exists and regen is not set.")
             continue
 
         audio_generator = client.text_to_speech.convert(
@@ -64,13 +65,13 @@ with open(input_file, mode='r') as file:
             seed=seed,
         )
 
-        if not os.path.exists(output_path):
-            os.makedirs(output_path)
+        if not os.path.exists(tmp_path):
+            os.makedirs(tmp_path)
 
-        with open(output_file, "wb") as f:
+        with open(tmp_file, "wb") as f:
             for chunk in audio_generator:
                 f.write(chunk)
-        print(f"Generated {output_file}")
+        print(f"Generated {tmp_file}")
 
         # Convert to specified format
         convert_output_path = os.path.join(output_path, convert_format)
@@ -80,9 +81,13 @@ with open(input_file, mode='r') as file:
         convert_filename = filename + f".{convert_format}"
         convert_output_file = os.path.join(convert_output_path, convert_filename)
 
-        audio = AudioSegment.from_mp3(output_file)
+        audio = AudioSegment.from_mp3(tmp_file)
         audio = audio.set_frame_rate(frame_rate).set_channels(channels)
         if normalize:
             audio = audio.normalize()
         audio.export(convert_output_file, format=convert_format)
         print(f"Converted to {convert_output_file}")
+
+        # Delete the temporary file
+        os.remove(tmp_file)
+        print(f"Deleted temporary file {tmp_file}")
