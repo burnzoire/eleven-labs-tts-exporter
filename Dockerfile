@@ -7,6 +7,9 @@ WORKDIR /app
 # Install ffmpeg
 RUN apt-get update && apt-get install -y ffmpeg
 
+# Ensure ffmpeg is in the PATH
+ENV PATH="/usr/bin/ffmpeg:${PATH}"
+
 # Copy the current directory contents into the container at /app
 COPY . /app
 
