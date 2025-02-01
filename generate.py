@@ -11,7 +11,7 @@ if len(sys.argv) < 2 or len(sys.argv) > 3:
     sys.exit(1)
 
 input_file = sys.argv[1]
-regen_arg = sys.argv[2] if len(sys.argv() == 3 else "false"
+regen_arg = sys.argv[2] if len(sys.argv) == 3 else "false"
 regen = "true" in regen_arg.strip().lower()
 
 # Sanitize and resolve the input_file path
@@ -74,12 +74,11 @@ with open(input_file, mode='r') as file:
         print(f"Generated {tmp_file}")
 
         # Convert to specified format
-        convert_output_path = os.path.join(output_path, convert_format)
-        if not os.path.exists(convert_output_path):
-            os.makedirs(convert_output_path)
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
 
         convert_filename = filename + f".{convert_format}"
-        convert_output_file = os.path.join(convert_output_path, convert_filename)
+        convert_output_file = os.path.join(output_path, convert_filename)
 
         audio = AudioSegment.from_mp3(tmp_file)
         audio = audio.set_frame_rate(frame_rate).set_channels(channels)
