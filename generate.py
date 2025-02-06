@@ -39,6 +39,34 @@ def find_entry_by_path(report, path):
             return entry
     return None
 
+def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
+    """
+    Detect the duration of leading silence in an audio segment.
+    
+    :param sound: pydub.AudioSegment
+    :param silence_threshold: Threshold in dB for silence detection
+    :param chunk_size: Size of chunks to analyze in milliseconds
+    :return: Duration of leading silence in milliseconds
+    """
+    trim_ms = 0
+    while trim_ms < len(sound) and sound[trim_ms:trim_ms+chunk_size].dBFS < silence_threshold:
+        trim_ms += chunk_size
+    return trim_ms
+
+def truncate_silence(sound, silence_threshold=-50.0, chunk_size=10):
+    """
+    Remove leading and trailing silence from an audio segment.
+    
+    :param sound: pydub.AudioSegment
+    :param silence_threshold: Threshold in dB for silence detection
+    :param chunk_size: Size of chunks to analyze in milliseconds
+    :return: Trimmed pydub.AudioSegment
+    """
+    start_trim = detect_leading_silence(sound, silence_threshold, chunk_size)
+    end_trim = detect_leading_silence(sound.reverse(), silence_threshold, chunk_size)
+    
+    return sound[start_trim:len(sound)-end_trim]
+
 # Define constants for generate_format and model_id
 GENERATE_FORMAT = "mp3_44100_128"
 MODEL_ID = "eleven_multilingual_v2"
@@ -96,6 +124,7 @@ with open(input_file, mode='r') as file:
             audio = audio.set_frame_rate(frame_rate).set_channels(channels)
             if normalize:
                 audio = audio.normalize()
+            audio = truncate_silence(audio)
             audio.export(convert_output_file, format=convert_format)
 
             # Store the duration and path in the report
