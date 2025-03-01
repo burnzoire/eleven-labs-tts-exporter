@@ -83,10 +83,13 @@ with open(input_file, mode='r') as file:
             frame_rate = int(row['convert_framerate'])
             channels = int(row['convert_channels'])
             normalize = row['normalize'].lower() == 'true'
+            try:
+                boost = float(row['boost']) if row['boost'] else 0.0
+            except ValueError:
+                boost = 0.0
             seed = int(row['seed'])
             previous_text = row.get('previous_text')
             next_text = row.get('next_text')
-
             output_path = os.path.join("output", path)
             tmp_path = os.path.join("tmp", path)
             tmp_file = os.path.join(tmp_path, filename + ".mp3")
@@ -124,6 +127,8 @@ with open(input_file, mode='r') as file:
             audio = audio.set_frame_rate(frame_rate).set_channels(channels)
             if normalize:
                 audio = audio.normalize()
+            if boost != 0.0:
+                audio = audio + boost
             audio = truncate_silence(audio)
             audio.export(convert_output_file, format=convert_format)
 
